@@ -27,6 +27,24 @@ dependencies {
     implementation 'com.github.CowpayPayment:Cowpay-Android:{latest version}'
 }
 ```
+3- Update org.jetbrains.kotlin.android in build.grade (Project: Your Project) to be 1.9.0:
+
+```
+plugins {
+    id 'com.android.application' version '8.0.2' apply false
+    id 'com.android.library' version '8.0.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
+}
+
+```
+4- Update kotlinCompilerExtensionVersion in build.grade (Module :app) to be 1.5.1:
+
+```
+ composeOptions {
+        kotlinCompilerExtensionVersion '1.5.1'
+    }
+
+```
 
 ## IMPORT
 
