@@ -37,7 +37,7 @@ import java.net.URLEncoder
 fun WebViewContent(
     navController: NavController,
     payResponse: PayResponse,
-    webViewViewModel: WebViewViewModel = koinViewModel<WebViewViewModel>()
+    webViewViewModel: WebViewViewModel = koinViewModel()
 ) {
     val isFailed = webViewViewModel.isFailure.collectAsState()
     val exitWarning = webViewViewModel.exitWarning.collectAsState()

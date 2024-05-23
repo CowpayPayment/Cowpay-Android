@@ -6,7 +6,7 @@ you learn how to add and use (Cowpay SDK) in your Android Application.
 ## REQUIREMENTS
 
 _Minimum Android SDK 24_
-_Target API level 33_
+_Target API level 34_
 
 ## INSTALLATION
 
@@ -24,14 +24,15 @@ allprojects {
 
 ```
 dependencies {
-    implementation 'com.github.CowpayPayment:Cowpay-Android:1.0.0'
+    implementation 'com.github.CowpayPayment:Cowpay-Android:{latest version}'
 }
 ```
 
 ## IMPORT
 
 ```
-import 'com.luminsoft.cowpay_sdk'
+import com.luminsoft.cowpay_sdk.sdk.*
+import com.luminsoft.cowpay_sdk.sdk.model.*
 ```
 
 ## USAGE
@@ -75,6 +76,8 @@ CowpaySDK.launch function is used for launch Cowpay sdk. It’s a throws functio
 CowpayCallBack object contains Success, error and closedByUser call backs
 
 ```
+val activity = LocalContext.current as Activity
+
 try {
     CowpaySDK.launch(activity, object : CowpayCallback {
         override fun success(paymentSuccessModel: PaymentSuccessModel) {

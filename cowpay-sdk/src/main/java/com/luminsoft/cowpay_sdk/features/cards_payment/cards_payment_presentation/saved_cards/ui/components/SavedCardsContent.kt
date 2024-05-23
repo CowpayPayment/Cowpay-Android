@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -56,7 +55,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SavedCardsContent(
-    savedCardsViewModel: SavedCardsViewModel = koinViewModel<SavedCardsViewModel>(),
+    savedCardsViewModel: SavedCardsViewModel = koinViewModel(),
     navController: NavController
 ) {
     val loading = savedCardsViewModel.loading.collectAsState()
@@ -67,7 +66,7 @@ fun SavedCardsContent(
     val selectedCard = savedCardsViewModel.selectedCard.collectAsState()
     val isButtonLoading = savedCardsViewModel.isButtonLoading.collectAsState()
     val isShowCvvDialog = savedCardsViewModel.isCvvBottomSheetOpen.collectAsState()
-    val context = LocalContext.current
+//    val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
     if (loading.value) {
@@ -83,107 +82,108 @@ fun SavedCardsContent(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-               Column(modifier = Modifier.fillMaxHeight().weight(1f)) {
-                   Column() {
-                       Row(
-                           modifier = Modifier
-                               .fillMaxWidth()
-                               .height(30.dp),
-                           horizontalArrangement = Arrangement.SpaceBetween,
-                           verticalAlignment = Alignment.CenterVertically
-                       ) {
-                           Text(
-                               stringResource(id = R.string.select_card),
-                               style = MaterialTheme.typography.labelLarge,
-                               color = MaterialTheme.colorScheme.onSurface
-                           )
-                           Button(
-                               onClick = {
-                                   var isSavedCards = true
-                                   navController.navigate(
-                                       "${SdkNavigation.AddCardScreen.route}/{isSavedCards}".replace(
-                                           oldValue = "{isSavedCards}",
-                                           newValue = "$isSavedCards"
-                                       )
-                                   )
-                               },
-                               modifier = Modifier
-                                   .height(30.dp),
-                               colors = ButtonDefaults.buttonColors(containerColor = Color.Unspecified),
-                               contentPadding = PaddingValues(0.dp),
-                           ) {
-                               Row(verticalAlignment = Alignment.CenterVertically) {
-                                   Image(
-                                       painterResource(R.drawable.add_icon),
-                                       contentDescription = "",
-                                       modifier = Modifier
-                                           .size(15.dp),
-                                   )
-                                   Spacer(modifier = Modifier.width(5.dp))
-                                   Text(
-                                       stringResource(id = R.string.add_new_card),
-                                       style = MaterialTheme.typography.labelLarge,
-                                       color = MaterialTheme.colorScheme.primary
-                                   )
-                               }
-                           }
-
-                       }
-                       Spacer(modifier = Modifier.height(5.dp))
-                   }
-                   if (savedCards.value!!.isNotEmpty()) {
-                       LazyColumn(modifier = Modifier.weight(1f)) {
-
-                           items(savedCards.value!!) { cardData ->
-                               cardItem(cardData, onClick = {
-                                   savedCardsViewModel.changeSelectedCard(cardData)
-                               }, isSelected = (cardData == selectedCard.value))
-                           }
-                       }
-                   }
-                   else {
-                       Row(
-                           modifier = Modifier
-                               .fillMaxWidth()
-                               .fillMaxHeight(),
-                           horizontalArrangement = Arrangement.Center,
-                           verticalAlignment = Alignment.CenterVertically
-                       ) {
-                           Text(
-                               stringResource(id = R.string.there_is_no_saved_cards),
-                               style = MaterialTheme.typography.labelSmall,
-                               color = MaterialTheme.colorScheme.onSurface
-                           )
-                       }
-                   }
-               }
-                if (!savedCards.value.isNullOrEmpty())
-                        Column() {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            feesResponse.value?.let {
-                                CowpaySDK.paymentInfo?.amount?.let { it1 ->
-                                    PaymentTotalDetails(
-                                        it,
-                                        it1, CowpaySDK.paymentInfo!!.isFeesOnCustomer
+                Column(modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)) {
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(30.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                stringResource(id = R.string.select_card),
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Button(
+                                onClick = {
+                                    val isSavedCards = true
+                                    navController.navigate(
+                                        "${SdkNavigation.AddCardScreen.route}/{isSavedCards}".replace(
+                                            oldValue = "{isSavedCards}",
+                                            newValue = "$isSavedCards"
+                                        )
+                                    )
+                                },
+                                modifier = Modifier
+                                    .height(30.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color.Unspecified),
+                                contentPadding = PaddingValues(0.dp),
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Image(
+                                        painterResource(R.drawable.add_icon),
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(15.dp),
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(
+                                        stringResource(id = R.string.add_new_card),
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.primary
                                     )
                                 }
                             }
-                            if (!isButtonLoading.value) {
-                                ConfirmButton(
-                                    onClick = {
-                                        savedCardsViewModel.isCvvBottomSheetOpen.value = true
-                                    })
-                            } else {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    SpinKitLoadingIndicator()
-                                }
 
-                            }
-                            Spacer(modifier = Modifier.height(20.dp))
                         }
+                        Spacer(modifier = Modifier.height(5.dp))
+                    }
+                    if (savedCards.value!!.isNotEmpty()) {
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+
+                            items(savedCards.value!!) { cardData ->
+                                CardItem(cardData, onClick = {
+                                    savedCardsViewModel.changeSelectedCard(cardData)
+                                }, isSelected = (cardData == selectedCard.value))
+                            }
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                stringResource(id = R.string.there_is_no_saved_cards),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+                if (!savedCards.value.isNullOrEmpty())
+                    Column {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        feesResponse.value?.let {
+                            CowpaySDK.paymentInfo?.amount?.let { it1 ->
+                                PaymentTotalDetails(
+                                    it,
+                                    it1, CowpaySDK.paymentInfo!!.isFeesOnCustomer
+                                )
+                            }
+                        }
+                        if (!isButtonLoading.value) {
+                            ConfirmButton(
+                                onClick = {
+                                    savedCardsViewModel.isCvvBottomSheetOpen.value = true
+                                })
+                        } else {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                SpinKitLoadingIndicator()
+                            }
+
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
 
             }
         }
@@ -197,13 +197,13 @@ fun SavedCardsContent(
                         buttonText = stringResource(id = R.string.exit),
                         onPressedButton = {
                             activity.finish()
-                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
 
                         },
                     )
                     {
                         activity.finish()
-                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                     }
                 }
             } else {
@@ -218,12 +218,12 @@ fun SavedCardsContent(
                         secondButtonText = stringResource(id = R.string.exit),
                         onPressedSecondButton = {
                             activity.finish()
-                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                         }
                     )
                     {
                         activity.finish()
-                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                     }
                 }
 
@@ -241,12 +241,12 @@ fun SavedCardsContent(
                     buttonText = stringResource(id = R.string.exit),
                     onPressedButton = {
                         activity.finish()
-                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                     },
                 )
                 {
                     activity.finish()
-                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                 }
             }
         } else if (feesResponse.value == null) {
@@ -261,13 +261,13 @@ fun SavedCardsContent(
                     secondButtonText = stringResource(id = R.string.exit),
                     onPressedSecondButton = {
                         activity.finish()
-                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
 
                     }
                 )
                 {
                     activity.finish()
-                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
 
                 }
             }
@@ -277,7 +277,7 @@ fun SavedCardsContent(
 }
 
 @Composable
-fun cardItem(tokenizedCardData: TokenizedCardData, onClick: () -> Unit, isSelected: Boolean) {
+fun CardItem(tokenizedCardData: TokenizedCardData, onClick: () -> Unit, isSelected: Boolean) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color.Unspecified),
@@ -305,8 +305,10 @@ fun cardItem(tokenizedCardData: TokenizedCardData, onClick: () -> Unit, isSelect
             verticalAlignment = Alignment.CenterVertically
 
         ) {
-            Row (modifier = Modifier
-                .fillMaxHeight(),verticalAlignment = Alignment.CenterVertically){
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight(), verticalAlignment = Alignment.CenterVertically
+            ) {
                 tokenizedCardData.parseTokenizedCardNetworkTypeEnum()?.let {
                     Image(
                         painterResource(it.getImageId()),
@@ -317,22 +319,25 @@ fun cardItem(tokenizedCardData: TokenizedCardData, onClick: () -> Unit, isSelect
                     )
                 }
                 Text(
-                    "**** **** **** ${tokenizedCardData.cardNumber?.substring((tokenizedCardData.cardNumber?.length ?:4) -4) ?: ""}",
+                    "**** **** **** ${tokenizedCardData.cardNumber?.substring((tokenizedCardData.cardNumber?.length ?: 4) - 4) ?: ""}",
                     modifier = Modifier.padding(start = 15.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
-            Row(modifier = Modifier
-                .fillMaxHeight(),verticalAlignment = Alignment.CenterVertically){
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight(), verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     "${tokenizedCardData.cardExpMonth}/${tokenizedCardData.cardExpYear}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 RadioButton(
-                    selected = (isSelected), modifier = Modifier.padding(horizontal = 0.dp, vertical = 0.dp),
+                    selected = (isSelected),
+                    modifier = Modifier.padding(horizontal = 0.dp, vertical = 0.dp),
                     onClick = onClick,
                     colors = RadioButtonDefaults.colors(
                         selectedColor = MaterialTheme.colorScheme.primary,
@@ -349,7 +354,7 @@ fun cardItem(tokenizedCardData: TokenizedCardData, onClick: () -> Unit, isSelect
 
 @Composable
 fun ConfirmButton(
-    savedCardsViewModel: SavedCardsViewModel = koinViewModel<SavedCardsViewModel>(),
+    savedCardsViewModel: SavedCardsViewModel = koinViewModel(),
     onClick: () -> Unit
 ) {
     val isValid: Boolean = (savedCardsViewModel.selectedCard.collectAsState().value != null)

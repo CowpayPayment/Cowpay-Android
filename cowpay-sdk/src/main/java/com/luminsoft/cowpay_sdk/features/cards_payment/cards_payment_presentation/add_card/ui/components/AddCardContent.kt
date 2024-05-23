@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -54,29 +53,42 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AddCardContent(
-    addCardViewModel: AddCardViewModel = koinViewModel<AddCardViewModel>(),
-    navController:NavController,
-    isSavedCards:Boolean = true
+    addCardViewModel: AddCardViewModel = koinViewModel(),
+    navController: NavController,
+    isSavedCards: Boolean = true
 ) {
     val loading = addCardViewModel.loading.collectAsState()
     val failure = addCardViewModel.failure.collectAsState()
     val feesResponse = addCardViewModel.feesResponse.collectAsState()
     val isTokenization = addCardViewModel.isTokenization.collectAsState()
-    val context = LocalContext.current
+//    val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
     if (loading.value) {
         LoadingView()
     } else if (!loading.value && feesResponse.value != null) {
-        BackGroundView(title = stringResource(id = R.string.payment_details),navController = navController, isBackButton = true, onClick =isSavedCards.let{if(it){null}else{{
-            navController.popBackStack(route = SdkNavigation.PaymentMethodsScreen.route, inclusive = false)
-        }} } ) {
+        BackGroundView(
+            title = stringResource(id = R.string.payment_details),
+            navController = navController,
+            isBackButton = true,
+            onClick = isSavedCards.let {
+                if (it) {
+                    null
+                } else {
+                    {
+                        navController.popBackStack(
+                            route = SdkNavigation.PaymentMethodsScreen.route,
+                            inclusive = false
+                        )
+                    }
+                }
+            }) {
             Spacer(modifier = Modifier.height(20.dp))
             Column(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Column() {
+                Column {
                     Text(
                         stringResource(id = R.string.add_payment_card),
                         style = MaterialTheme.typography.labelLarge,
@@ -150,7 +162,7 @@ fun AddCardContent(
                     }
 
                 }
-                Column() {
+                Column {
                     ConfirmButton(onClick = { addCardViewModel.pay(navController) })
                     Spacer(modifier = Modifier.height(20.dp))
                 }
@@ -164,13 +176,13 @@ fun AddCardContent(
                             buttonText = stringResource(id = R.string.exit),
                             onPressedButton = {
                                 activity.finish()
-                                CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                                CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
 
                             },
                         )
                         {
                             activity.finish()
-                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
 
                         }
                     }
@@ -186,12 +198,12 @@ fun AddCardContent(
                             secondButtonText = stringResource(id = R.string.exit),
                             onPressedSecondButton = {
                                 activity.finish()
-                                CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                                CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                             }
                         )
                         {
                             activity.finish()
-                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                            CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                         }
                     }
 
@@ -208,12 +220,12 @@ fun AddCardContent(
                     buttonText = stringResource(id = R.string.exit),
                     onPressedButton = {
                         activity.finish()
-                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                     },
                 )
                 {
                     activity.finish()
-                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                 }
             }
         } else if (feesResponse.value == null) {
@@ -228,12 +240,12 @@ fun AddCardContent(
                     secondButtonText = stringResource(id = R.string.exit),
                     onPressedSecondButton = {
                         activity.finish()
-                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                        CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                     }
                 )
                 {
                     activity.finish()
-                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message,it))
+                    CowpaySDK.cowpayCallback?.error(PaymentFailedModel(it.message, it))
                 }
             }
 
@@ -243,7 +255,7 @@ fun AddCardContent(
 
 @Composable
 fun ConfirmButton(
-    addCardViewModel: AddCardViewModel = koinViewModel<AddCardViewModel>(),
+    addCardViewModel: AddCardViewModel = koinViewModel(),
     onClick: () -> Unit
 ) {
     val isValid: Boolean =
@@ -264,8 +276,8 @@ fun ConfirmButton(
             stringResource(id = R.string.next),
             isEnabled = (isValid)
         )
-    }else{
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+    } else {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             SpinKitLoadingIndicator()
         }
 
@@ -274,7 +286,7 @@ fun ConfirmButton(
 
 
 @Composable
-fun CardHolderTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCardViewModel>()) {
+fun CardHolderTextField(addCardViewModel: AddCardViewModel = koinViewModel()) {
     NormalTextField(
         painter = painterResource(R.drawable.user_icon),
         label = stringResource(id = R.string.card_holder_name),
@@ -288,9 +300,12 @@ fun CardHolderTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCa
         },
         error = addCardViewModel.holderName.collectAsState().value?.value?.fold({ stringResource(id = it) },
             { null }),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text,imeAction = ImeAction.Next),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
 
-    )
+        )
 }
 
 object CardNumberMask {
@@ -299,7 +314,7 @@ object CardNumberMask {
 }
 
 @Composable
-fun CardNumberTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCardViewModel>()) {
+fun CardNumberTextField(addCardViewModel: AddCardViewModel = koinViewModel()) {
 
     NormalTextField(
         painter = painterResource(R.drawable.credit_card_icon),
@@ -314,7 +329,10 @@ fun CardNumberTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCa
         error = addCardViewModel.cardNumber.collectAsState().value?.value?.fold({ stringResource(id = it) },
             { null }),
         visualTransformation = MaskVisualTransformation(CardNumberMask.MASK),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next)
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next
+        )
     )
 }
 
@@ -324,7 +342,7 @@ object ExpiryDateMask {
 }
 
 @Composable
-fun CardExpiryDateTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCardViewModel>()) {
+fun CardExpiryDateTextField(addCardViewModel: AddCardViewModel = koinViewModel()) {
     NormalTextField(
         painter = painterResource(R.drawable.calendar_icon),
         label = stringResource(id = R.string.expiry_date),
@@ -338,12 +356,15 @@ fun CardExpiryDateTextField(addCardViewModel: AddCardViewModel = koinViewModel<A
         error = addCardViewModel.expiryDate.collectAsState().value?.value?.fold({ stringResource(id = it) },
             { null }),
         visualTransformation = MaskVisualTransformation(ExpiryDateMask.MASK),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next)
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next
+        )
     )
 }
 
 @Composable
-fun CardCvvTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCardViewModel>()) {
+fun CardCvvTextField(addCardViewModel: AddCardViewModel = koinViewModel()) {
     NormalTextField(
         painter = painterResource(R.drawable.cvv_icon),
         label = stringResource(id = R.string.cvv),
@@ -356,6 +377,9 @@ fun CardCvvTextField(addCardViewModel: AddCardViewModel = koinViewModel<AddCardV
         },
         error = addCardViewModel.cvv.collectAsState().value?.value?.fold({ stringResource(id = it) },
             { null }),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number,imeAction = ImeAction.Done)
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        )
     )
 }

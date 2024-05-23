@@ -8,7 +8,7 @@ import com.luminsoft.cowpay_sdk.features.cards_payment.cards_payment_data.cards_
 class  CardsPaymentRemoteDataSourceImpl (private val network: BaseRemoteDataSource, private val cardsPaymentApi: CardsPaymentApi):
     CardsPaymentRemoteDataSource {
 
-    override suspend fun getCards(request: GetCardsRequest, ): BaseResponse<Any> {
+    override suspend fun getCards(request: GetCardsRequest): BaseResponse<Any> {
 
             return network.apiRequest { cardsPaymentApi.getCards(request) }
 

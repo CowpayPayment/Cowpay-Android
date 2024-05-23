@@ -49,7 +49,7 @@ class AddBankCardViewModel(
     var cvvTextValue = mutableStateOf(TextFieldValue())
     var cvv = MutableStateFlow<CVV?>(null)
 
-    var isTokenization: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private var isTokenization: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     var feesResponse = MutableStateFlow<GetFeesResponse?>(null)
     var payResponse = MutableStateFlow<PayResponse?>(null)

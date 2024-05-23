@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.webkit.WebResourceErrorCompat
@@ -37,11 +36,11 @@ import org.koin.androidx.compose.koinViewModel
 fun WebViewBankCardContent(
     navController: NavController,
     payResponse: PayResponse,
-    webViewViewModel: WebViewViewModel = koinViewModel<WebViewViewModel>()
+    webViewViewModel: WebViewViewModel = koinViewModel()
 ) {
     val isFailed = webViewViewModel.isFailure.collectAsState()
     val responseModel = webViewViewModel.responseModel.collectAsState()
-    val showWebView = webViewViewModel.showWebView.collectAsState()
+//    val showWebView = webViewViewModel.showWebView.collectAsState()
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
     if (isFailed.value == null && responseModel.value == null)

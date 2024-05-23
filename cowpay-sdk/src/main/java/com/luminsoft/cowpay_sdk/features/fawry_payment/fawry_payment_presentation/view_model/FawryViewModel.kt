@@ -1,7 +1,5 @@
 package com.luminsoft.cowpay_sdk.features.fawry_payment.fawry_payment_presentation.view_model
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import com.luminsoft.cowpay_sdk.failures.SdkFailure

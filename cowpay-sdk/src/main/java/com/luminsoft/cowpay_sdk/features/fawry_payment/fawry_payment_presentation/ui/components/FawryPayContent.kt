@@ -1,7 +1,6 @@
 package com.luminsoft.cowpay_sdk.features.fawry_payment.fawry_payment_presentation.ui.components
 
 import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,7 +41,6 @@ import com.luminsoft.cowpay_sdk.ui.components.BottomSheetStatus
 import com.luminsoft.cowpay_sdk.ui.components.ButtonView
 import com.luminsoft.cowpay_sdk.ui.components.LoadingView
 import com.luminsoft.cowpay_sdk.ui.components.SpinKitLoadingIndicator
-import com.simon.xmaterialccp.data.ccpDefaultColors
 import com.togitech.ccp.component.TogiCountryCodePicker
 import com.togitech.ccp.component.isPhoneNumber
 import org.koin.androidx.compose.koinViewModel
@@ -57,7 +55,7 @@ fun FawryPayContent(
     val feesResponse = fawryViewModel.feesResponse.collectAsState()
     val payResponse = fawryViewModel.payResponse.collectAsState()
     val activity = LocalContext.current as Activity
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
     if (loading.value) {
         LoadingView()
@@ -79,12 +77,7 @@ fun FawryPayContent(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    CountryCodePickerFunction(fawryViewModel, context)
-//                    InternationalMobilePhoneTogi(
-//                        fawryViewModel, context,
-//                    )
-//                    Spacer(modifier = Modifier.height(5.dp))
-//                    MobileNumberTextField()
+                    CountryCodePickerFunction(fawryViewModel)
 
                     Spacer(modifier = Modifier.height(20.dp))
                     feesResponse.value?.let {
@@ -214,8 +207,8 @@ fun ConfirmButton(
     fawryViewModel: FawryViewModel = koinViewModel(),
     onClick: () -> Unit
 ) {
-    val isValid: Boolean =
-        fawryViewModel.mobileNumber.collectAsState().value?.value?.isRight() ?: false
+//    val isValid: Boolean =
+//        fawryViewModel.mobileNumber.collectAsState().value?.value?.isRight() ?: false
 
     val isButtonLoading = fawryViewModel.isButtonLoading.collectAsState()
 
@@ -240,7 +233,7 @@ fun ConfirmButton(
 @Composable
 fun CountryCodePickerFunction(
     fawryViewModel: FawryViewModel,
-    context: Context,
+//    context: Context,
 ) {
     var enteredText by remember { mutableStateOf("") }
     Column(
@@ -253,8 +246,8 @@ fun CountryCodePickerFunction(
                 text = enteredText,
                 onValueChange = {
                     enteredText = it
-                     fawryViewModel.mobileNumber.value =
-                         MobileNumber(it)
+                    fawryViewModel.mobileNumber.value =
+                        MobileNumber(it)
                 },
             )
         }

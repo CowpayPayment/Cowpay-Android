@@ -33,8 +33,8 @@ enum class TokenizedCardNetworkTypeEnum {
 
     fun getImageId(): Int {
         return when (this) {
-            TokenizedCardNetworkTypeEnum.MasterCard -> R.drawable.mastercard_logo
-            TokenizedCardNetworkTypeEnum.Visa -> R.drawable.visa_logo
+            MasterCard -> R.drawable.mastercard_logo
+            Visa -> R.drawable.visa_logo
             else -> {
                 R.drawable.visa_logo
             }

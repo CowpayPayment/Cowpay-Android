@@ -17,7 +17,7 @@ object CowpaySDK {
 
     // this info related to every order
     internal var paymentInfo: PaymentInfo? = null
-     var environment = CowpayEnvironment.STAGING
+    var environment = CowpayEnvironment.STAGING
     private var localizationCode = LocalizationCode.EN
     internal var cowpayCallback: CowpayCallback? = null
     internal var identityProductionBaseUrl: String = "https://identity.cowpay.me:8002/GetToken"
@@ -85,18 +85,19 @@ object CowpaySDK {
         activity.startActivity(Intent(activity, CowpayMainActivity::class.java))
     }
 
-    fun setLocale(lang: LocalizationCode, activity: Activity) {
+    @Suppress("DEPRECATION")
+    private fun setLocale(lang: LocalizationCode, activity: Activity) {
         val locale = if (lang != LocalizationCode.AR) {
             Locale("en")
         } else {
             Locale("ar")
         }
 
-        val config: Configuration = activity.getBaseContext().getResources().getConfiguration()
+        val config: Configuration = activity.baseContext.resources.configuration
         config.setLocale(locale)
-        activity.getBaseContext().getResources().updateConfiguration(
+        activity.baseContext.resources.updateConfiguration(
             config,
-            activity.getBaseContext().getResources().getDisplayMetrics()
+            activity.baseContext.resources.displayMetrics
         )
     }
 

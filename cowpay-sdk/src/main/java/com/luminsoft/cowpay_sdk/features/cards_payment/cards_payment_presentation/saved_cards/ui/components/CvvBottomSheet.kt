@@ -1,6 +1,5 @@
 package com.luminsoft.cowpay_sdk.features.cards_payment.cards_payment_presentation.saved_cards.ui.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +28,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import com.luminsoft.cowpay_sdk.R
 import com.luminsoft.cowpay_sdk.features.cards_payment.cards_payment_presentation.saved_cards.view_model.SavedCardsViewModel
 import com.luminsoft.cowpay_sdk.form_fields.CVV
@@ -39,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CvvDialog(
-    savedCardsViewModel: SavedCardsViewModel = koinViewModel<SavedCardsViewModel>(),
+    savedCardsViewModel: SavedCardsViewModel = koinViewModel(),
 ) {
 
     val isValid: Boolean = savedCardsViewModel.cvv.collectAsState().value?.value?.isRight() ?: false
@@ -63,7 +61,7 @@ fun CvvDialog(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(10.dp))
-            cvvTextField()
+            CVVTextField()
 
             Spacer(modifier = Modifier.height(40.dp))
             ButtonView(
@@ -84,7 +82,7 @@ fun CvvDialog(
     }
 }
 @Composable
-fun cvvTextField(savedCardsViewModel: SavedCardsViewModel = koinViewModel<SavedCardsViewModel>(),){
+fun CVVTextField(savedCardsViewModel: SavedCardsViewModel = koinViewModel()){
 
      val error = savedCardsViewModel.cvv.collectAsState().value?.value?.fold({ stringResource(id = it) },
         { null })
