@@ -58,7 +58,7 @@ CowpaySDK.init function is used for Initializing Cowpay sdk instance to use it. 
 try {
     CowpaySDK.init(
         merchantCode = merchantCode,
-        hashKey = merchantHashKey,
+        merchantHash = merchantHashKey,
         merchantPhoneNumber = merchantPhoneNumber,
         paymentInfo = paymentInfo,
         environment = CowpayEnvironment.STAGING or CowpayEnvironment.PRODUCTION,
