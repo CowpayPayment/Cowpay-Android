@@ -24,7 +24,7 @@ allprojects {
 
 ```
 dependencies {
-    implementation 'link'
+    implementation 'com.github.CowpayPayment:Cowpay-Android:1.0.0'
 }
 ```
 
